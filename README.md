@@ -8,6 +8,7 @@ Messnote is a project for web pages filtering and editing. And it is a class ass
 Please members pull your code to the Developer branch.
 If your code is conflict with existed branches, creating a new branch.
 ## Members
+* [x-web](https://github.com/x-web) (group leader)
 * [duzefu](https://github.com/duzefu)
 * [BencoLee](https://github.com/BencoLee)
 * [dodoyouloveme](https://github.com/dodoyouloveme)
