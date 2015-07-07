@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Messnote - Note Edit</title>
+
+    <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
+    <link href="{{ static_url('css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{{ static_url('css/freelancer.css') }}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{{ static_url('font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+
+    <link href="{{ static_url('css/wysiwyg-editor.css') }}" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        section {
+            font-family: Arial,Verdana;
+            width:860px;
+            margin: 0 auto;
+            padding-top: 200px;
+        }
+        p {
+            margin: 0;
+            padding: 0;
+        }
+        .button {
+            -moz-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        /* CSS for the font-name + font-size plugin */
+        .wysiwyg-plugin-list {
+            max-height: 16em;
+            overflow: auto;
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+        .wysiwyg-plugin-list a,
+        .wysiwyg-plugin-list a:link,
+        .wysiwyg-plugin-list a:visited {
+            display: block;
+            color: black;
+            padding: 5px 10px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .wysiwyg-plugin-list a:hover {
+            color: HighlightText;
+            background-color: Highlight;
+        }
+        /* CSS for the smiley plugin */
+        .wysiwyg-plugin-smilies {
+            padding: 10px;
+            text-align: center;
+            white-space: normal;
+        }
+        .wysiwyg-plugin-smilies img {
+            display: -moz-inline-stack; /* inline-block: http://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+            display: inline-block;
+            *display: inline;
+        }
+
+        .wysiwyg-editor {
+            height: 300px;
+        }
+
+        #noteform input{
+            margin-bottom: 30px;
+            width: 300px;
+            height: 30px;
+        }
+
+        #noteform .controls {
+            margin-top: 30px;
+        }
+
+        #noteform .controls > a + a {
+            color: #333;
+        }
+
+        #noteform .controls > a + a:hover {
+            color: #777;
+        }
+
+        section .notebook {color: #333;font-size: 20px;}
+        section .notebook:hover {text-decoration: none; color: #777;}
+
+        form {margin-top: 30px;}
+        form .label {color:red;}
+    </style>
+
+</head>
+
+<body id="page-top" class="index">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Messnote</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="index.html?#portfolio">热门</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="index.html?#about">关于</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="index.html?#contact">联系我们</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <section>
+        <span><em><a href="" class="notebook">x-web的笔记本 - nodejs</a></em></span>
+
+        <form id="noteform">  
+
+            <input type="text" class="input-xlarge" id="title" placeholder="笔记标题" />
+            <span class="label label-important">标题不能为空!</span>
+
+            <div>
+                <textarea id="editor" name="editor" placeholder="笔记内容"></textarea>
+            </div>
+
+            <div id="success"></div>
+
+            <div class="controls pull-right">
+                <a class="btn btn-primary" id="save">保存</a>
+                <a class="btn" id="cancel">取消</a>
+            </div>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright &copy; 2015 <a href="https://x-web.github.io">X-web</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-top page-scroll">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+
+    <!-- jQuery -->
+    <script src="{{ static_url( 'js/jquery.js' )}}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{{ static_url('js/bootstrap.min.js')}}"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="{{ static_url('js/jquery.easing.min.js') }}"></script>
+    <script src="{{ static_url('js/classie.js')}}"></script>
+    <script src="{{ static_url('js/cbpAnimatedHeader.js') }}"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="{{ static_url('js/jqBootstrapValidation.js')}}"></script>
+    <script src="{{ static_url('js/contact_me.js')}}"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="{{ static_url('js/freelancer.js')}}"></script>
+
+    <script src="{{ static_url('js/editor.js')}}"></script>
+
+    <script src="{{ static_url('js/wysiwyg.js')}}"></script>
+
+    <script src="{{ static_url('js/wysiwyg-editor.js')}}"></script>
+
+    <script type="text/javascript">
+    $(function(){
+        $(".label").hide();
+
+        $("#noteform").submit(function(){
+            var title = $.trim($("#title").val());
+            var content = $.trim($(".wysiwyg-editor").html());
+            var notebookid = $(".notebook").attr("data-notebookid");
+
+            if(title === ''){
+                $(this).find(".label").show();
+                setTimeout('$("#noteform").find(".label").hide()', 3000);
+                return false;
+            }
+
+            $.ajax({
+                url: "/note/create",
+                type: "POST",
+                dataType : "json",
+                data: {
+                    "title" : title,
+                    "content" : content,
+                    "notebookid" : notebookid
+                },
+                success: function() {
+                    // Enable button & show success message
+                    $("#save").attr("disabled", false);
+                    $('#success').html("<div class='alert alert-success'>");
+                    $('#success > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                        .append("</button>");
+                    $('#success > .alert-success')
+                        .append("<strong>笔记保存成功！</strong>");
+                    $('#success > .alert-success')
+                        .append('</div>');
+
+                    setTimeout('window.location = "notebook.html"', 1000);
+                },
+                error: function() {
+                    // Fail message
+                    $('#success').html("<div class='alert alert-danger'>");
+                    $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                        .append("</button>");
+                    $('#success > .alert-danger').append("<strong>笔记保存失败！</strong>");
+                    $('#success > .alert-danger').append('</div>');
+                },
+            })
+
+            return false;
+        })
+
+        $("#save").click(function(){
+            $("#noteform").submit();
+        })
+
+        $("#cancel").click(function(){
+            window.location = 'notebook.html';
+        })
+    })
+    </script>
+</body>
+
+</html>
