@@ -206,7 +206,8 @@ section.success a.active {
 #portfolio .portfolio-item {
     right: 0;
     margin: 0 40px 60px;
-    border: 1px dashed #EEDC82;
+    padding: 0 10px 10px 10px;
+    border-bottom: 1px dashed #EEDC82;
 }
 
 #portfolio .portfolio-item a {
@@ -418,4 +419,21 @@ footer .footer-below {
 .portfolio-modal .modal-backdrop {
     display: none;
     opacity: 0;
+}
+
+
+#navbar ul li:last-child div > a {
+    padding-top: 19.5px;
+    padding-bottom: 19.5px; 
+    color:#fff;
+}
+
+#navbar ul li:last-child div > a:hover {
+    color:#000;
+    background-color: #EEDC82;
+} 
+
+.nav .open > a {
+    background-color: #EEDC82 !important; 
+    color: #000 !important;
 }
