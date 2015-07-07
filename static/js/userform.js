@@ -34,7 +34,7 @@ $(function() {
                     $('#success > .alert-success')
                         .append('</div>');
 
-                    setTimeout('window.location = "index.html"', 1000);
+                    setTimeout('window.location = "/"', 1000);
                 },
                 error: function() {
                     // Fail message
