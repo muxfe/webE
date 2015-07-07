@@ -19,9 +19,6 @@ from datetime import *
 define("port", default=8888, help="Run On The Given Port", type=int)
 
 class BaseHandler(tornado.web.RequestHandler):
-    userid = 1
-    noteid = 1
-    notebookid = 1
     def initialize(self):
         self.db = self.settings['db']
         self.user = self.db.get_collection('user')
@@ -86,15 +83,15 @@ class RegisterHandler(BaseHandler):
         print(username, password)
         doc = self.user.find_one({'username':username})
         print(doc)
+        count = self.db.user.count() + 1
         if doc == None:
             self.user.insert({
                 'username' : username,
                 'password' : password,
-                'userid' : BaseHandler.userid,
+                'userid' : count,
                 'user_description' : 'XDU',
                 'register_date' : datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'),
             })
-            BaseHandler.userid += 1
             #self.redirect('/')
 '''
 class NoteBookHandler(BaseHandler):
@@ -104,7 +101,8 @@ class NoteBookHandler(BaseHandler):
 '''
 class CreateNoteBookHandler(BaseHandler):
 
-
+    def get(self):
+        self.render('notebook.html')
     def post(self):
         msg = json.loads(self.request.body.decode())
         self.notebook.insert(msg)
@@ -141,12 +139,13 @@ class NoteHandler(BaseHandler):
             self.render('note.html')
 '''
 class CreateNoteHandler(BaseHandler):
+    @authenticated
+    def get(self):
+        self.render('note_edit.html')
 
     def post(self):
-        msg = json.loads(self.request.body.decode())
-        self.note.insert(msg)
-        self.write(json.dumps({"ok":True}))
-        logging.info("Create Successfully")
+        data = self.request.body.decode()
+        
 
 class UpdateNoteHandler(BaseHandler):
 

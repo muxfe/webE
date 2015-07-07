@@ -154,7 +154,7 @@
 
         <form id="noteform">  
 
-            <input type="text" class="input-xlarge" id="title" placeholder="笔记标题" />
+            <input type="text" class="input-xlarge" name="title" id="title" placeholder="笔记标题" />
             <span class="label label-important">标题不能为空!</span>
 
             <div>
@@ -201,10 +201,6 @@
     <script src="{{ static_url('js/classie.js')}}"></script>
     <script src="{{ static_url('js/cbpAnimatedHeader.js') }}"></script>
 
-    <!-- Contact Form JavaScript -->
-    <script src="{{ static_url('js/jqBootstrapValidation.js')}}"></script>
-    <script src="{{ static_url('js/contact_me.js')}}"></script>
-
     <!-- Custom Theme JavaScript -->
     <script src="{{ static_url('js/freelancer.js')}}"></script>
 
@@ -222,7 +218,6 @@
             var title = $.trim($("#title").val());
             var content = $.trim($(".wysiwyg-editor").html());
             var notebookid = $(".notebook").attr("data-notebookid");
-
             if(title === ''){
                 $(this).find(".label").show();
                 setTimeout('$("#noteform").find(".label").hide()', 3000);
@@ -265,6 +260,7 @@
         })
 
         $("#save").click(function(){
+            alert("fuck")
             $("#noteform").submit();
         })
 
