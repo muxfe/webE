@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Messnote - Notebook</title>
+    <title>Messnote - Note Edit</title>
 
     <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
     <link href="{{ static_url('css/bootstrap.min.css') }}" rel="stylesheet">
@@ -20,6 +20,8 @@
     <!-- Custom Fonts -->
     <link href="{{ static_url('font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
 
+    <link href="{{ static_url('css/wysiwyg-editor.css') }}" rel="stylesheet">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -28,16 +30,82 @@
     <![endif]-->
 
     <style type="text/css">
-        section {width:50%; margin: 0 auto;padding-top: 200px;}
+        section {
+            font-family: Arial,Verdana;
+            width:860px;
+            margin: 0 auto;
+            padding-top: 200px;
+        }
+        p {
+            margin: 0;
+            padding: 0;
+        }
+        .button {
+            -moz-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        /* CSS for the font-name + font-size plugin */
+        .wysiwyg-plugin-list {
+            max-height: 16em;
+            overflow: auto;
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+        .wysiwyg-plugin-list a,
+        .wysiwyg-plugin-list a:link,
+        .wysiwyg-plugin-list a:visited {
+            display: block;
+            color: black;
+            padding: 5px 10px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .wysiwyg-plugin-list a:hover {
+            color: HighlightText;
+            background-color: Highlight;
+        }
+        /* CSS for the smiley plugin */
+        .wysiwyg-plugin-smilies {
+            padding: 10px;
+            text-align: center;
+            white-space: normal;
+        }
+        .wysiwyg-plugin-smilies img {
+            display: -moz-inline-stack; /* inline-block: http://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+            display: inline-block;
+            *display: inline;
+        }
+
+        .wysiwyg-editor {
+            height: 300px;
+        }
+
+        #noteform input{
+            margin-bottom: 30px;
+            width: 300px;
+            height: 30px;
+        }
+
+        #noteform .controls {
+            margin-top: 30px;
+        }
+
+        #noteform .controls > a + a {
+            color: #333;
+        }
+
+        #noteform .controls > a + a:hover {
+            color: #777;
+        }
+
         section .notebook {color: #333;font-size: 20px;}
-        
-        section .notelist .noteitem  {list-style: none;margin-top: 50px;border-bottom: 2px dashed #eee;padding: 5px 5px;}
-        section .notelist .noteitem div {margin: 0 0;}
-        section .notelist .noteitem > div + div > span {margin-left: 20px;}
-        section .notelist .noteitem > div > span + span {font-size:20px;}
-        section .notelist .noteitem > div + div {margin-top: 10px;}
-        section .notelist .noteitem > div span a {color:#333;font-size:22px;}
-        section .notelist .noteitem span a:hover {color:#777;text-decoration: none;}
+        section .notebook:hover {text-decoration: none; color: #777;}
+
+        form {margin-top: 30px;}
     </style>
 
 </head>
@@ -80,61 +148,22 @@
         <!-- /.container-fluid -->
     </nav>
 
-    
     <section>
-        <span class="notebook"><em>x-web的笔记本</em> - nodejs</span>
-        <div class="notelist">
-            <div class="noteitem">
-                <div class="row">
-                    <span><a href="">Title</a></span>
-                    <span class="pull-right">author</span>
-                </div>
-                <div class="row">
-                    <span class="pull-right">浏览次数：13</span>
-                    <em class="pull-right">2015-07-06</em>
-                </div>
+        <span><em><a href="" class="notebook">x-web的笔记本 - nodejs</a></em></span>
+
+        <form id="noteform">  
+
+            <input type="text" class="input-xlarge" id="title" placeholder="笔记标题" />           
+
+            <div>
+                <textarea id="editor" name="editor" placeholder="笔记内容"></textarea>
             </div>
-            <div class="noteitem">
-                <div class="row">
-                    <span><a href="">Title</a></span>
-                    <span class="pull-right">author</span>
-                </div>
-                <div class="row">
-                    <span class="pull-right">浏览次数：13</span>
-                    <em class="pull-right">2015-07-06</em>
-                </div>
+
+            <div class="controls pull-right">
+                <a class="btn btn-primary">保存</a>
+                <a class="btn">取消</a>
             </div>
-            <div class="noteitem">
-                <div class="row">
-                    <span><a href="">Title</a></span>
-                    <span class="pull-right">author</span>
-                </div>
-                <div class="row">
-                    <span class="pull-right">浏览次数：13</span>
-                    <em class="pull-right">2015-07-06</em>
-                </div>
-            </div>
-            <div class="noteitem">
-                <div class="row">
-                    <span><a href="">Title</a></span>
-                    <span class="pull-right">author</span>
-                </div>
-                <div class="row">
-                    <span class="pull-right">浏览次数：13</span>
-                    <em class="pull-right">2015-07-06</em>
-                </div>
-            </div>
-            <div class="noteitem">
-                <div class="row">
-                    <span><a href="">Title</a></span>
-                    <span class="pull-right">author</span>
-                </div>
-                <div class="row">
-                    <span class="pull-right">浏览次数：13</span>
-                    <em class="pull-right">2015-07-06</em>
-                </div>
-            </div>
-        </div>
+        </form>
     </section>
 
     <!-- Footer -->
@@ -174,6 +203,12 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="{{ static_url('js/freelancer.js')}}"></script>
+
+    <script src="{{ static_url('js/editor.js')}}"></script>
+
+    <script src="{{ static_url('js/wysiwyg.js')}}"></script>
+
+    <script src="{{ static_url('js/wysiwyg-editor.js')}}"></script>
 
 </body>
 
