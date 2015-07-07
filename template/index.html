@@ -81,8 +81,12 @@
                         <span class="name">Start Messnote</span>
                         <hr class="star-light">
                         <span class="skills">
-                        	<a class="btn btn-warning" href="./register">立即注册</a>
-                        	<a href="./login" class="btn btn-primary" style="margin-left:20px">登录</a>
+                            {% if boolean %}
+                                <a class="btn btn-warning" href="./register">立即注册</a>
+                                <a href="./login" class="btn btn-primary" style="margin-left:20px">登录</a>
+                            {% else %}
+                                <h4>{{username}}欢迎您 , {{date}}</h4>
+                            {% end %}
                         </span>
                     </div>
                 </div>
