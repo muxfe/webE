@@ -36,6 +36,12 @@
         section .notebook-list .notebook-item div > span {font-size:25px;}
         section .notebook-list .notebook-item div > span a {color:#333;}
         section .notebook-list .notebook-item div > span a:hover {color:#777; text-decoration: none;}
+
+        section > a {color:#333 !important;border: 1px solid #aaa !important;}
+        section > a:hover {color:#333 !important;text-decoration: none;cursor: pointer;background-color: #ffe;font-weight: bold;}
+
+        #notebook-des {margin: 30px 0;}
+        #btn-create-notebook {margin-right: 20px;}
     </style>
 
 </head>
@@ -81,6 +87,7 @@
     
     <section>
         <span class="notebook"><em>x-web的笔记本</em></span>
+        <a class="btn pull-right" href="#create-notebook" data-toggle="modal">+添加笔记本</a>
         <div class="notebook-list">
             <div class="notebook-item">
                 <div class="row">
@@ -141,6 +148,41 @@
         </a>
     </div>
 
+     <!-- Portfolio Modals -->
+    <div class="portfolio-modal modal fade" id="create-notebook" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>创建笔记本</h2>
+                            <hr class="star-primary">
+                            
+                            <form id="notebook-form">
+                                <div class="controls">
+                                    <label>笔记本名称</label>
+                                    <input type="text" class="input-xlarge" id="notebook-name"/>
+                                </div>
+                                <div class="controls">
+                                    <label>笔记本描述</label>
+                                    <input type="text" class="input-xlarge" id="notebook-des"/>
+                                </div>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btn-create-notebook">创建</button>
+                                <button type="button" class="btn" data-dismiss="modal"><i class="fa fa-times"></i> 关闭</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>   
+
     <!-- jQuery -->
     <script src="{{ static_url( 'js/jquery.js' )}}"></script>
 
@@ -155,6 +197,38 @@
     <!-- Custom Theme JavaScript -->
     <script src="{{ static_url('js/freelancer.js')}}"></script>
 
+    <script type="text/javascript">
+        $("#notebook-form").submit(function(){
+            var name = $("#notebook-name").val();
+            var des = $("#notebook-des").val();
+
+            if(name === ''){
+                alert("笔记本名称不能为空！");
+                return false;
+            }
+
+            $.ajax({
+                url: "/notebook/create",
+                dataType: "json",
+                data: {
+                    "notebook_name" : name,
+                    "notebook_description" : des
+                },
+                success: function(data){
+                    alert("创建成功！");
+                },
+                error: function(){
+                    alert("创建失败！");
+                }
+            })
+
+            return false;
+        })
+
+        $("#btn-create-notebook").click(function(){
+            $("#notebook-form").submit();
+        })
+    </script>
 </body>
 
 </html>
