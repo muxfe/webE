@@ -29,17 +29,16 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
         return self.get_secure_cookie('username')
 
-class MainHandler(BaseHandler):
-    def get(self):
-        self.write("Fuck WebEngine")
-
 class IndexHandler(BaseHandler):
     def get(self):
         boolean = True
         username = None
         date = None
         name = self.get_current_user()
-        print(name)
+        doc = self.notelist.find({'private':False},{'_id':0}).sort('visit',pymongo.DESCENDING).limit(6)
+        show_note = []
+        for _ in doc:
+            show_note.append(self.note.find_one({'noteid':str(int(_['noteid']))},{'_id':0}))
         if name :
             boolean = False
             username = name.decode()
@@ -49,6 +48,7 @@ class IndexHandler(BaseHandler):
             boolean = boolean,
             username = username,
             date = date,
+            show_note = show_note,
         )
 
 class LoginHandler(BaseHandler):
@@ -73,7 +73,6 @@ class LoginHandler(BaseHandler):
                 logging.info("Successful Failed")
                 #self.redirect('/login.html')
 
-
 class RegisterHandler(BaseHandler):
     def get(self, *args, **kwargs):
         self.render('register.html')
@@ -83,7 +82,7 @@ class RegisterHandler(BaseHandler):
         print(username, password)
         doc = self.user.find_one({'username':username})
         print(doc)
-        count = self.db.user.count() + 1
+        count = self.user.count() + 1
         if doc == None:
             self.user.insert({
                 'username' : username,
@@ -93,21 +92,88 @@ class RegisterHandler(BaseHandler):
                 'register_date' : datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'),
             })
             #self.redirect('/')
+
+class ReadNoteBookHandler(BaseHandler):
+    @authenticated
+    def get(self):
+        self.render('notebook.html')
+
+    def post(self):
+        msg = json.loads(self.request.body.decode())
+        self.notebook.insert(msg)
+        logging.info("Create Successfully")
+
+class CreateNoteHandler(BaseHandler):
+    @authenticated
+    def get(self):
+        self.render('note_edit.html')
+
+    def post(self):
+        data = self.request.body.decode()
+        title = data['title']
+        content = data['content']
+        notebookid = data['notebookid']
+        notebook = self.notebook.find_one({'notebookid':notebookid})
+        count = self.note.count() + 1
+        doc = {
+            'title' : title,
+            'content' : content,
+            'notebookid' : notebookid,
+            'noteid' : count,
+            'notebook_name' : notebook['notebookname'],
+            'username' : self.get_current_user().decode(),
+            'create_date' : datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'),
+            'change_date' : datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'),
+        }
+        self.note.insert(doc)
+        self.write(json.dumps({'ok' : True}))
+
+class LogoutHandler(BaseHandler):
+    def get(self, *args, **kwargs):
+        self.set_secure_cookie('username','')
+        self.render(
+            'index.html',
+            boolean = True,
+        )
+
+class Application(tornado.web.Application):
+    def __init__(self):
+        handlers = [
+            (r'/', IndexHandler),
+            (r'/login', LoginHandler),
+            (r'/register', RegisterHandler),
+            #(r'/note/read/(/d+)', ReadNoteHandler),
+            (r'/note/create', CreateNoteHandler),
+            #(r'/note/update/(/d+)', UpdateNoteHandler),
+            #(r'/note/delete/(/d+)', DeleteNoteHandler),
+            (r'/notebook', ReadNoteBookHandler),
+            #(r'/notebook/update/(/d+)', UpdateNoteBookHandler),
+            #(r'/notebook/delete/(/d+)', DeleteNoteBookHandler),
+            (r'/logout', LogoutHandler),
+        ]
+        settings = dict(
+            static_path = os.path.join(os.path.dirname('__file__'), 'static'),
+            template_path = os.path.join(os.path.dirname('__file'), 'template'),
+            debug = True,
+            cookie_secret = 'fuckthewebengineeringhomework',
+            login_url = '/login',
+            db = pymongo.MongoClient('localhost', 27017).get_database('WebEngineering'),
+        )
+        tornado.web.Application.__init__(self,handlers,**settings)
+
+if __name__ == '__main__':
+    tornado.options.parse_command_line()
+    application = Application()
+    application.listen(options.port)
+    tornado.ioloop.IOLoop.instance().start()
 '''
 class NoteBookHandler(BaseHandler):
         @authenticated
         def get(self):
             self.render('notebook.html')
 '''
-class CreateNoteBookHandler(BaseHandler):
 
-    def get(self):
-        self.render('notebook.html')
-    def post(self):
-        msg = json.loads(self.request.body.decode())
-        self.notebook.insert(msg)
-        logging.info("Create Successfully")
-
+'''
 class UpdateNoteBookHandler(BaseHandler):
 
     def post(self, notebookid):
@@ -128,25 +194,14 @@ class DeleteNoteBookHandler(BaseHandler):
             logging.info("Delete Failed")
         else :
             logging.info("Delete %s Successfully" % str(delresult))
-
-class ReadNoteBookHandler(BaseHandler):
-    pass
-
+'''
 '''
 class NoteHandler(BaseHandler):
         @authenticated
         def get(self):
             self.render('note.html')
 '''
-class CreateNoteHandler(BaseHandler):
-    @authenticated
-    def get(self):
-        self.render('note_edit.html')
-
-    def post(self):
-        data = self.request.body.decode()
-        
-
+'''
 class UpdateNoteHandler(BaseHandler):
 
     def post(self, noteid):
@@ -172,38 +227,7 @@ class ReadNoteHandler(BaseHandler):
 
     def get(self, noteid):
         pass
+'''
 
-
-
-class Application(tornado.web.Application):
-    def __init__(self):
-        handlers = [
-            (r'/', IndexHandler),
-            (r'/login', LoginHandler),
-            (r'/register', RegisterHandler),
-            (r'/note/read/(/d+)', ReadNoteHandler),
-            (r'/note/create', CreateNoteHandler),
-            (r'/note/update/(/d+)', UpdateNoteHandler),
-            (r'/note/delete/(/d+)', DeleteNoteHandler),
-            (r'/notebook/create', CreateNoteBookHandler),
-            (r'/notebook/update/(/d+)', UpdateNoteBookHandler),
-            (r'/notebook/read/(/d+)', ReadNoteBookHandler),
-            (r'/notebook/delete/(/d+)', DeleteNoteBookHandler),
-        ]
-        settings = dict(
-            static_path = os.path.join(os.path.dirname('__file__'), 'static'),
-            template_path = os.path.join(os.path.dirname('__file'), 'template'),
-            debug = True,
-            cookie_secret = 'fuckthewebengineeringhomework',
-            login_url = '/login.html',
-            db = pymongo.MongoClient('localhost', 27017).get_database('WebEngineering'),
-        )
-        tornado.web.Application.__init__(self,handlers,**settings)
-
-if __name__ == '__main__':
-    tornado.options.parse_command_line()
-    application = Application()
-    application.listen(options.port)
-    tornado.ioloop.IOLoop.instance().start()
 
 
