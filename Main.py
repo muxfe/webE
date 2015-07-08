@@ -35,7 +35,7 @@ class IndexHandler(BaseHandler):
         username = None
         date = None
         name = self.get_current_user()
-        doc = self.notelist.find({'private':False},{'_id':0}).sort('visit',pymongo.DESCENDING).limit(6)
+        doc = self.notelist.find({'private':False},{'_id':0}).sort('visit',pymongo.DESCENDING)
         show_note = []
         for _ in doc:
             show_note.append(self.note.find_one({'noteid':str(int(_['noteid']))},{'_id':0}))
@@ -43,6 +43,8 @@ class IndexHandler(BaseHandler):
             boolean = False
             username = name.decode()
             date = datetime.now().strftime('%Y-%m-%d %I:%M:%S %p')
+        #for _ in show_note:
+           # print(_)
         self.render(
             'index.html',
             boolean = boolean,
@@ -57,9 +59,9 @@ class LoginHandler(BaseHandler):
     def post(self):
         username = self.get_argument('username')
         password = self.get_argument('password')
-        print(username, password)
+        #print(username, password)
         doc = self.user.find_one({'username':username})
-        print(doc)
+        #print(doc)
         if doc != None:
             real_password = doc['password']
             if password == real_password:
@@ -79,9 +81,9 @@ class RegisterHandler(BaseHandler):
     def post(self):
         username = self.get_argument('username')
         password = self.get_argument('password')
-        print(username, password)
+        #print(username, password)
         doc = self.user.find_one({'username':username})
-        print(doc)
+        #print(doc)
         count = self.user.count() + 1
         if doc == None:
             self.user.insert({
@@ -94,7 +96,6 @@ class RegisterHandler(BaseHandler):
             #self.redirect('/')
 
 class ReadNoteBookHandler(BaseHandler):
-    @authenticated
     def get(self):
         self.render('notebook.html')
 
@@ -102,6 +103,19 @@ class ReadNoteBookHandler(BaseHandler):
         msg = json.loads(self.request.body.decode())
         self.notebook.insert(msg)
         logging.info("Create Successfully")
+
+class ReadNoteHandler(BaseHandler):
+    def get(self,noteid):
+        notelist = self.notelist.find_one_and_delete({'noteid':noteid})
+        notelist['visit'] += 1
+        note = self.note.find_one_and_delete({'noteid':noteid},{'_id':0})
+        note['visit'] = notelist['visit']
+        self.note.insert(note)
+        self.notelist.insert(notelist)
+        self.render(
+            'note.html',
+            note = note,
+        )
 
 class CreateNoteHandler(BaseHandler):
     @authenticated
@@ -131,10 +145,7 @@ class CreateNoteHandler(BaseHandler):
 class LogoutHandler(BaseHandler):
     def get(self, *args, **kwargs):
         self.set_secure_cookie('username','')
-        self.render(
-            'index.html',
-            boolean = True,
-        )
+        self.redirect('/')
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -142,7 +153,7 @@ class Application(tornado.web.Application):
             (r'/', IndexHandler),
             (r'/login', LoginHandler),
             (r'/register', RegisterHandler),
-            #(r'/note/read/(/d+)', ReadNoteHandler),
+            (r'/note/([0-9]+)', ReadNoteHandler),
             (r'/note/create', CreateNoteHandler),
             #(r'/note/update/(/d+)', UpdateNoteHandler),
             #(r'/note/delete/(/d+)', DeleteNoteHandler),
