@@ -121,7 +121,7 @@
                             <h3><a href="/note/{{note['noteid']}}">{{note['note_title']}}</a></h3>
                             <span>{{note['username']}}</span>
                             <span class="pull-right"><i>{{note['create_date']}}</i></span>
-                            <span class="pull-right">浏览次数:<span class="visits">13</span></span>
+                            <span class="pull-right">浏览次数:<span class="visits">{{int(note['visit'])}}</span></span>
                         </div>
                     {% end %}
                 {% else %}

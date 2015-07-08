@@ -7,8 +7,6 @@ import tornado.auth
 import tornado.options
 import os
 import pymongo
-import hashlib
-import datetime
 import json
 import logging
 
@@ -124,20 +122,21 @@ class CreateNoteHandler(BaseHandler):
 
     def post(self):
         data = self.request.body.decode()
-        title = data['title']
-        content = data['content']
+        title = data['note_title']
+        content = data['note_content']
         notebookid = data['notebookid']
         notebook = self.notebook.find_one({'notebookid':notebookid})
         count = self.note.count() + 1
         doc = {
-            'title' : title,
-            'content' : content,
+            'note_title' : title,
+            'note_content' : content,
             'notebookid' : notebookid,
             'noteid' : count,
             'notebook_name' : notebook['notebookname'],
             'username' : self.get_current_user().decode(),
             'create_date' : datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'),
             'change_date' : datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'),
+            'visit' : 1,
         }
         self.note.insert(doc)
         self.write(json.dumps({'ok' : True}))
@@ -175,7 +174,8 @@ class Application(tornado.web.Application):
 if __name__ == '__main__':
     tornado.options.parse_command_line()
     application = Application()
-    application.listen(options.port)
+    http_server = tornado.httpserver.HTTPServer(application)
+    http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
 '''
 class NoteBookHandler(BaseHandler):

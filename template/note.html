@@ -60,7 +60,7 @@
                         <a href="#page-top"></a>
                     </li>
                     <li class="page-scroll">
-                        <a href="index.html?#portfolio">热门</a>
+                        <a href="/">热门</a>
                     </li>
                     <li class="page-scroll">
                         <a href="index.html?#about">关于</a>
@@ -78,6 +78,15 @@
     <section>
         <article>
             <span><em><a href="" class="notebook">x-web的笔记本 - nodejs</a></em></span>
+            {% if note %}
+            <div class="title">
+                <h2>{{note['note_title']}}</h2>
+                <p>{{note['username']}}</p><span>{{note['create_date']}}</span>
+            </div>
+            <div class="content">
+                {{note['note_content']}}
+            </div>
+            {% else %}
             <div class="title">
                 <h2>Title</h2>
                 <p>author</p><span>2015-07-06</span>
@@ -118,6 +127,7 @@
                 1.列出所有信息
 
             </div>
+            {% end %}
         </article>
     </section>
 
