@@ -38,6 +38,9 @@
         section .notelist .noteitem > div + div {margin-top: 10px;}
         section .notelist .noteitem > div span a {color:#333;font-size:22px;}
         section .notelist .noteitem span a:hover {color:#777;text-decoration: none;}
+
+        section > a {color:#333 !important;border: 1px solid #aaa !important;}
+        section > a:hover {color:#333 !important;text-decoration: none;cursor: pointer;background-color: #ffe;font-weight: bold;}        
     </style>
 
 </head>
@@ -83,6 +86,7 @@
     
     <section>
         <span class="notebook"><em>x-web的笔记本</em> - nodejs</span>
+        <a class="btn pull-right" href="/note_edit.html">+创建笔记</a>
         <div class="notelist">
             <div class="noteitem">
                 <div class="row">
