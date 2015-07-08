@@ -86,7 +86,7 @@
     
     <section>
         <span class="notebook"><em>{{ username }}</em>  ----  {{ notebook_name }}</span>
-        <a class="btn pull-right" href="/note/create/{{ username }}">+创建笔记</a>
+        <a class="btn pull-right" href="/note/create/{{ notebook_name }}">+创建笔记</a>
         <div class="notelist">
             {% if show_note %}
                 {% for noteitem in show_note %}
