@@ -7,9 +7,10 @@ import tornado.auth
 import tornado.options
 import os
 import pymongo
-import json
 import logging
+import json
 
+from tornado.escape import json_decode
 from tornado.web import authenticated
 from tornado.options import define, options
 from datetime import *
@@ -24,6 +25,12 @@ class BaseHandler(tornado.web.RequestHandler):
         self.note = self.db.get_collection('note')
         self.notelist = self.db.get_collection('notelist')
 
+    def set_default_headers(self):
+        self.set_header('Access-Control-Allow-Origin', '*')
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
+        self.set_header('Access-Control-Max-Age', 1000)
+        self.set_header('Access-Control-Allow-Headers', '*')
+        self.set_header('Content-type', 'application/json')
     def get_current_user(self):
         return self.get_secure_cookie('username')
 
@@ -32,21 +39,25 @@ class IndexHandler(BaseHandler):
         boolean = True
         username = None
         date = None
+        userid = None
         name = self.get_current_user()
-        doc = self.notelist.find({'private':False},{'_id':0}).sort('visit',pymongo.DESCENDING)
+        doc = self.notelist.find({'private':False},{'_id':0}).sort('visit',pymongo.DESCENDING).limit(6)
         show_note = []
         for _ in doc:
-            show_note.append(self.note.find_one({'noteid':str(int(_['noteid']))},{'_id':0}))
+            val = self.note.find_one({'noteid':str(int(_['noteid']))},{'_id':0})
+            if val :
+                show_note.append(val)
         if name :
             boolean = False
-            username = name.decode()
+            username = name.decode('utf-8')
+            userid = self.user.find_one({'username':username})['userid']
             date = datetime.now().strftime('%Y-%m-%d %I:%M:%S %p')
-        #for _ in show_note:
-           # print(_)
+
         self.render(
             'index.html',
             boolean = boolean,
             username = username,
+            userid = userid,
             date = date,
             show_note = show_note,
         )
@@ -87,27 +98,39 @@ class RegisterHandler(BaseHandler):
             self.user.insert({
                 'username' : username,
                 'password' : password,
-                'userid' : count,
+                'userid' : str(count),
                 'user_description' : 'XDU',
                 'register_date' : datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'),
             })
             #self.redirect('/')
 
 class ReadNoteBookHandler(BaseHandler):
-    def get(self):
-        self.render('notebook.html')
-
-    def post(self):
-        msg = json.loads(self.request.body.decode())
-        self.notebook.insert(msg)
-        logging.info("Create Successfully")
+    @authenticated
+    def get(self,username):
+        notebookid = self.notebook.find_one({'username':username})['notebookid']
+        doc = self.note.find({'notebookid':notebookid,'username':username})
+        notebook_name = 'Default'
+        show_note = []
+        for _ in doc:
+            show_note.append(_)
+            if notebook_name == 'Default':
+                notebook_name = _['notebook_name']
+        #print(show_note)
+        self.render(
+            'notebook.html',
+            show_note = show_note,
+            username = username,
+            notebook_name = notebook_name,
+        )
+    def post(self, userid):
+        pass
 
 class ReadNoteHandler(BaseHandler):
     def get(self,noteid):
         notelist = self.notelist.find_one_and_delete({'noteid':noteid})
         notelist['visit'] += 1
         note = self.note.find_one_and_delete({'noteid':noteid},{'_id':0})
-        note['visit'] = notelist['visit']
+        note['visit'] += 1
         self.note.insert(note)
         self.notelist.insert(notelist)
         self.render(
@@ -115,32 +138,78 @@ class ReadNoteHandler(BaseHandler):
             note = note,
         )
 
+#创建笔记
 class CreateNoteHandler(BaseHandler):
     @authenticated
-    def get(self):
-        self.render('note_edit.html')
+    def get(self, username):
+        notebook= self.notebook.find_one({'username':username})
+        notebook_name = notebook.get('notebook_name','Default') if notebook else 'Default'
+        notebookid = notebook['notebookid']
+        self.render(
+            'note_edit.html',
+            username = username,
+            notebook_name = notebook_name,
+            notebookid = notebookid,
+        )
 
-    def post(self):
-        data = self.request.body.decode()
-        title = data['note_title']
-        content = data['note_content']
-        notebookid = data['notebookid']
+    def post(self, username):
+        title = self.get_argument('title')
+        content = self.get_argument('content')
+        notebookid = self.get_argument('notebookid')
         notebook = self.notebook.find_one({'notebookid':notebookid})
+        notebook_name = notebook.get('notebook_name','Default') if notebook else 'Default'
         count = self.note.count() + 1
         doc = {
             'note_title' : title,
             'note_content' : content,
             'notebookid' : notebookid,
-            'noteid' : count,
-            'notebook_name' : notebook['notebookname'],
-            'username' : self.get_current_user().decode(),
+            'noteid' : str(count),
+            'notebook_name' : notebook_name,
+            'username' : self.get_current_user().decode('utf-8'),
             'create_date' : datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'),
             'change_date' : datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'),
             'visit' : 1,
         }
+        lists = {
+            'username' : self.get_current_user().decode('utf-8'),
+            'private' : False,
+            'visit' : 1,
+            'noteid' : str(count),
+            'change_date' : datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'),
+        }
         self.note.insert(doc)
+        self.notelist.insert(lists)
         self.write(json.dumps({'ok' : True}))
 
+class CreateNoteBookHandler(BaseHandler):
+    @authenticated
+    def get(self, username):
+        notebooks= self.notebook.find({'username':username})
+        #notebook_name = notebook.get('notebook_name','Default') if notebook else 'Default'
+        self.render(
+            'notebook_list.html',
+            username = username,
+            notebooks = notebooks,
+        )
+
+#创建笔记本
+class FuckNoteBookHandler(BaseHandler):
+    @authenticated
+    def post(self, username):
+        notebook_name = self.get_argument('notebook_name')
+        notebook_description = self.get_argument('notebook_description')
+        count = self.notebook.count() + 1
+        doc = {
+            'notebookid' : str(count),
+            'notebook_name' : notebook_name,
+            'notebook_description' : notebook_description,
+            'username' : self.get_current_user().decode('utf-8'),
+            'create_date' : datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'),
+            'change_date' : datetime.now().strftime('%Y-%m-%d %I:%M:%S %p'),
+        }
+        self.notebook.insert(doc)
+        self.write(json.dumps({'ok' : True}))
+        #self.redirect('/notebook_list/%s'%username)
 class LogoutHandler(BaseHandler):
     def get(self, *args, **kwargs):
         self.set_secure_cookie('username','')
@@ -153,10 +222,12 @@ class Application(tornado.web.Application):
             (r'/login', LoginHandler),
             (r'/register', RegisterHandler),
             (r'/note/([0-9]+)', ReadNoteHandler),
-            (r'/note/create', CreateNoteHandler),
+            (r'/note/create/([0-9a-zA-Z]+)', CreateNoteHandler),
+            (r'/notebook_list/([0-9a-zA-Z]+)', CreateNoteBookHandler),
+            (r'/notebook/create/([0-9a-zA-Z]+)', FuckNoteBookHandler),
             #(r'/note/update/(/d+)', UpdateNoteHandler),
             #(r'/note/delete/(/d+)', DeleteNoteHandler),
-            (r'/notebook', ReadNoteBookHandler),
+            (r'/notebook/([0-9a-zA-Z]+)', ReadNoteBookHandler),
             #(r'/notebook/update/(/d+)', UpdateNoteBookHandler),
             #(r'/notebook/delete/(/d+)', DeleteNoteBookHandler),
             (r'/logout', LogoutHandler),
