@@ -24,13 +24,14 @@ class BaseHandler(tornado.web.RequestHandler):
         self.notebook = self.db.get_collection('notebook')
         self.note = self.db.get_collection('note')
         self.notelist = self.db.get_collection('notelist')
-
+    '''
     def set_default_headers(self):
         self.set_header('Access-Control-Allow-Origin', '*')
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
         self.set_header('Access-Control-Max-Age', 1000)
         self.set_header('Access-Control-Allow-Headers', '*')
         self.set_header('Content-type', 'application/json')
+    '''
     def get_current_user(self):
         return self.get_secure_cookie('username')
 
@@ -41,11 +42,11 @@ class IndexHandler(BaseHandler):
         date = None
         userid = None
         name = self.get_current_user()
-        doc = self.notelist.find({'private':False},{'_id':0}).sort('visit',pymongo.DESCENDING).limit(6)
+        doc = self.notelist.find({'private':False},{'_id':0}).sort('visit',pymongo.DESCENDING)
         show_note = []
         for _ in doc:
             val = self.note.find_one({'noteid':str(int(_['noteid']))},{'_id':0})
-            if val :
+            if val and len(show_note) < 6:
                 show_note.append(val)
         if name :
             boolean = False
@@ -68,21 +69,14 @@ class LoginHandler(BaseHandler):
     def post(self):
         username = self.get_argument('username')
         password = self.get_argument('password')
-        #print(username, password)
         doc = self.user.find_one({'username':username})
-        #print(doc)
         if doc != None:
             real_password = doc['password']
             if password == real_password:
                 logging.info("Login Successfully")
                 self.set_secure_cookie('username',username, expires_days=None)
-                #self.userinfo['username'] = username
-                #self.userinfo['date'] = datetime.now().strftime('%Y-%m-%d %I:%M:%S %p')
-                #self.boolean = False
-                #self.redirect('/')
             else :
                 logging.info("Successful Failed")
-                #self.redirect('/login.html')
 
 class RegisterHandler(BaseHandler):
     def get(self, *args, **kwargs):
@@ -234,7 +228,7 @@ class Application(tornado.web.Application):
         ]
         settings = dict(
             static_path = os.path.join(os.path.dirname('__file__'), 'static'),
-            template_path = os.path.join(os.path.dirname('__file'), 'template'),
+            template_path = os.path.join(os.path.dirname('__file__'), 'template'),
             debug = True,
             cookie_secret = 'fuckthewebengineeringhomework',
             login_url = '/login',
