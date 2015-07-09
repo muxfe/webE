@@ -423,14 +423,14 @@ footer .footer-below {
 
 
 #navbar ul li:last-child div > a {
-    padding-top: 19.5px;
-    padding-bottom: 19.5px; 
+    padding-top: 19.5px !important;
+    padding-bottom: 19.5px !important; 
     color:#fff;
 }
 
 #navbar ul li:last-child div > a:hover {
-    color:#000;
-    background-color: #EEDC82;
+    color:#000 !important;
+    background-color: #EEDC82 !important;
 } 
 
 .nav .open > a {
