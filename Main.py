@@ -27,6 +27,7 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
         return self.get_secure_cookie('username')
 
+# 主页
 class IndexHandler(BaseHandler):
     def get(self):
         boolean = True
@@ -122,11 +123,13 @@ class CreateNoteHandler(BaseHandler):
         # notebook= self.notebook.find_one({'username':username})
         # notebook_name = notebook.get('notebook_name','Default') if notebook else 'Default'
         # notebookid = notebook['notebookid']
+        # note = self.note.find_one({'username':username,'notebookid':notebookid})
         self.render(
             'note_edit.html',
             username = username,
             notebook_name = notebook_name,
             notebookid = notebookid,
+            # note = note,
         )
 
     def post(self, notebook_name):
@@ -167,12 +170,15 @@ class CreateNoteBookHandler(BaseHandler):
     def get(self, userid):
         notebooks = self.notebook.find({'userid':userid})
         username = self.user.find_one({'userid':userid})['username']
+        notebook_name = self.notebook.find_one({'username':username,'userid':userid})['notebook_name']
         self.render(
             'notebook_list.html',
             username = username,
             notebooks = notebooks,
             userid = userid,
+            notebook_name = notebook_name,
         )
+
 
 #创建笔记本 /notebook/create/username
 class FuckNoteBookHandler(BaseHandler):
@@ -212,6 +218,66 @@ class DelNoteBookHandler(BaseHandler):
         notebookid = self.notebook.find_one_and_delete({'userid':userid,'username':username,'notebook_name':notebook_name})['notebookid']
         self.note.remove({'notebook_name':notebook_name,'notebookid':notebookid})
         self.redirect('/notebook_list/%s'%userid)
+
+# 编辑笔记本 /notebook/update/notebook_name
+class UpdateNoteBookHandler(BaseHandler):
+    @authenticated
+    def get(self,notebook_name):
+        username = self.get_current_user().decode()
+        userid = self.user.find_one({'username':username})['userid']
+        notebooks = self.notebook.find({'userid':userid,'username':username})
+        self.render(
+            'notebook_list.html',
+            username = username,
+            userid = userid,
+            notebooks = notebooks,
+            notebook_name = notebook_name,
+        )
+    def post(self,notebook_name):
+        new_notebook_name = self.get_argument('notebook_name')
+        new_notebook_description = self.get_argument('notebook_description')
+        username = self.get_current_user().decode()
+        userid = self.user.find_one({'username':username})['userid']
+
+        doc = self.notebook.find_one_and_delete({'username':username,'notebook_name':notebook_name})
+        doc['change_date'] = datetime.now().strftime('%Y-%m-%d %I:%M:%S %p')
+        doc['notebook_name'] = new_notebook_name
+        doc['notebook_description'] = new_notebook_description
+        self.notebook.insert(doc)
+        self.write(json.dumps({'ok':True}))
+
+# 编辑笔记 /note/update/noteid
+class UpdateNoteHandler(BaseHandler):
+    @authenticated
+    def get(self, noteid):
+        username = self.get_current_user().decode()
+        print(username,noteid)
+        notebook = self.notebook.find_one({'username':username})
+        notebookid = notebook['notebookid']
+        notebook_name = notebook['notebook_name']
+        note = self.note.find_one({'username':username,'notebookid':notebookid})
+        self.render(
+            'update_note.html',
+            username = username,
+            notebook_name = notebook_name,
+            notebookid = notebookid,
+            note = note,
+        )
+
+    def post(self, noteid):
+        new_title = self.get_argument('title')
+        new_content = self.get_argument('content')
+        notebookid = self.get_argument('notebookid')
+
+        username = self.get_current_user().decode()
+        userid = self.user.find_one({'username':username})['userid']
+
+        doc = self.note.find_one_and_delete({'noteid':noteid,'notebookid':notebookid,'username':username})
+        doc['note_title'] = new_title
+        doc['note_content'] = new_content
+        doc['change_date'] = datetime.now().strftime('%Y-%m-%d %I:%M:%S %p')
+        self.note.insert(doc)
+        self.write(json.dumps({'ok':True}))
 
 # 删除笔记 /note/delete/noteid
 class DelNoteHandler(BaseHandler):
@@ -255,6 +321,8 @@ class Application(tornado.web.Application):
             (r'/register', RegisterHandler),
             (r'/note/([0-9]+)', ReadNoteHandler),
             (r'/note/create/([0-9a-zA-Z]+)', CreateNoteHandler),
+            (r'/note/update/([0-9a-zA-Z]+)',UpdateNoteHandler),
+            (r'/notebook/update/([0-9a-zA-Z]+)',UpdateNoteBookHandler),
             (r'/notebook_list/([0-9a-zA-Z]+)', CreateNoteBookHandler),
             (r'/notebook/create/([0-9a-zA-Z]+)', FuckNoteBookHandler),
             (r'/notebook/([0-9a-zA-Z]+)', ReadNoteBookHandler),

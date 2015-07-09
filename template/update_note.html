@@ -79,25 +79,32 @@
             display: inline-block;
             *display: inline;
         }
+
         .wysiwyg-editor {
             height: 300px;
         }
+
         #noteform input{
             margin-bottom: 30px;
             width: 300px;
             height: 30px;
         }
+
         #noteform .controls {
             margin-top: 30px;
         }
+
         #noteform .controls > a + a {
             color: #333;
         }
+
         #noteform .controls > a + a:hover {
             color: #777;
         }
+
         section .notebook {color: #333;font-size: 20px;}
         section .notebook:hover {text-decoration: none; color: #777;}
+
         form {margin-top: 30px;}
         form .label {color:red;}
     </style>
@@ -206,17 +213,32 @@
     <script type="text/javascript">
     $(function(){
         $(".label").hide();
+
+        // update note mode
+        // 判断是否是修改笔记
+        $("#title").val({{ note['note_title'] }});
+        $(".wysiwyg-editor").html({{ note['note_content'] }});
+        // update note mode END!
+
         $("#noteform").submit(function(){
             var title = $.trim($("#title").val());
             var content = $.trim($(".wysiwyg-editor").html());
             var notebookid = $(".notebook").attr("data-notebookid");
+
+            // 如果是修改笔记
+            var noteid = {{ note['noteid'] }};
+            // END
+
             if(title === ''){
                 $(this).find(".label").show();
                 setTimeout('$("#noteform").find(".label").hide()', 3000);
                 return false;
             }
+
             $.ajax({
-                url: "/note/create/{{ notebook_name }}",
+                //url: "/note/create/{{ notebook_name }}",
+                // 修改笔记
+                url : "/note/update/{{ note['noteid'] }}",
                 type: "POST",
                 dataType : "json",
                 data: {
@@ -234,7 +256,8 @@
                         .append("<strong>笔记保存成功！</strong>");
                     $('#success > .alert-success')
                         .append('</div>');
-                    setTimeout('window.location = "/notebook/{{ notebook_name }}"', 1000);
+
+                    setTimeout('window.location = "/notebook/{{ notebook_name }}"', 1);
                 },
                 error: function() {
                     // Fail message
@@ -245,11 +268,14 @@
                     $('#success > .alert-danger').append('</div>');
                 },
             })
+
             return false;
         })
+
         $("#save").click(function(){
             $("#noteform").submit();
         })
+
         $("#cancel").click(function(){
             window.location = '/notebook/{{ notebook_name }}';
         })

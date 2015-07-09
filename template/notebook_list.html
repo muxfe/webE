@@ -40,14 +40,14 @@
         section > a {color:#333 !important;border: 1px solid #aaa !important;}
         section > a:hover {color:#333 !important;text-decoration: none;cursor: pointer;background-color: #ffe;font-weight: bold;}
 
-        #notebook-des {margin: 30px 0;}
-        #btn-create-notebook {margin-right: 20px;}
+        #notebook-des,#update-notebook-des {margin: 30px 0;}
+        #btn-create-notebook,#btn-update-notebook {margin-right: 20px;}
 
         .notebook-list .notebook-item span:last-child a {margin-right: 10px;font-size: 15px;}
         .notebook-list .notebook-item span:last-child a.delete {color:#FF3030 !important; display:none;}
         .notebook-list .notebook-item span:last-child a.delete:hover {color:#CD2626 !important;text-decoration: none !important;}
         .notebook-list .notebook-item span:last-child a.edit {color:#1E90FF !important; display:none;}
-        .notebook-list .notebook-item span:last-child a.edit:hover {color:#104E8B !important;text-decoration: none !important;}           
+        .notebook-list .notebook-item span:last-child a.edit:hover {color:#104E8B !important;text-decoration: none !important;}            
     </style>
 
 </head>
@@ -99,7 +99,7 @@
                 {% for notebook in notebooks %}
                     <div class="notebook-item">
                         <div class="row">
-                            <span><a href="/notebook/{{ notebook['notebook_name'] }}">{{ notebook['notebook_name'] }}</a></span>
+                            <span><a href="/notebook/{{ notebook['notebook_name'] }}" data-notebookid="{{ notebook['notebookid'] }}">{{ notebook['notebook_name'] }}</a></span>
                             <em class="pull-right">{{notebook['create_date']}}</em>
                             <span>
                                 <a href="/notebook/delete/{{ notebook['notebook_name'] }}" class="delete pull-right">删除</a>
@@ -165,7 +165,42 @@
                 </div>
             </div>
         </div>
-    </div>   
+    </div> 
+
+    <!-- Portfolio Modals Edit Mode -->
+    <div class="portfolio-modal modal fade" id="update-notebook" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>修改笔记本</h2>
+                            <hr class="star-primary">
+                            
+                            <form id="notebook-update-form">
+                                <div class="controls">
+                                    <label>笔记本名称</label>
+                                    <input type="text" class="input-xlarge" id="update-notebook-name"/>
+                                </div>
+                                <div class="controls">
+                                    <label>笔记本描述</label>
+                                    <input type="text" class="input-xlarge" id="update-notebook-des"/>
+                                </div>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" id="btn-update-notebook">保存修改</button>
+                                <button type="button" class="btn" data-dismiss="modal"><i class="fa fa-times"></i> 关闭</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
 
     <!-- jQuery -->
     <script src="{{ static_url( 'js/jquery.js' )}}"></script>
@@ -183,6 +218,7 @@
 
     <script type="text/javascript">
         $(function(){
+            // create mode
             $("#notebook-form").submit(function(){
                 var name = $("#notebook-name").val();
                 var des = $("#notebook-des").val();
@@ -216,6 +252,8 @@
                 $("#notebook-form").submit();
             })
 
+            // create-mode END!
+
             $("div.notebook-item", "div.notebook-list").hover(function(){
                 $(this).find("a.delete, a.edit").show();
             }, function(){
@@ -231,7 +269,48 @@
                     //console.log("取消删除");
                     return false;
                 }
-            })            
+            })
+
+            $("a.edit","div.notebook-item").click(function(e){
+                e.preventDefault();
+                $("#update-notebook").modal();
+            })
+            // edit-mode
+            $("#btn-update-notebook").click(function(){
+                var self = this;
+                $("#notebook-update-form").submit(function(){
+                    var name = $("#update-notebook-name").val();
+                    var des = $("#update-notebook-des").val();
+                    var notebookid = $(self).parent().parent().find("span:first-child a").attr("data-notebookid");
+
+                    if(name === ''){
+                        alert("笔记本名称不能为空！");
+                        return false;
+                    }
+
+                    $.ajax({
+                        url: "/notebook/update/{{ notebook_name }}",
+                        type : 'POST',
+                        dataType: "json",
+                        data: {
+                            "notebook_name" : name,
+                            "notebook_description" : des
+                        },
+                        success: function(data){
+                            alert("创建成功！");
+                            setTimeout('window.location = "/notebook_list/{{ userid }}"', 1);
+                        },
+                        error: function(){
+                            alert("创建失败！");
+                            setTimeout('window.location = "/notebook_list/{{ userid }}"', 1);
+                        }
+                    })
+
+                    return false;
+                });
+                $("#notebook-update-form").submit();
+            })  
+            // edit-mode END!                       
         })
     </script>
 </body>
