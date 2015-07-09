@@ -99,7 +99,7 @@
                 {% for notebook in notebooks %}
                     <div class="notebook-item">
                         <div class="row">
-                            <span><a href="/notebook_list/{{ userid }}">{{ note['username'] }}</a></span>
+                            <span><a href="/notebook/{{ notebook['notebook_name'] }}">{{ notebook['notebook_name'] }}</a></span>
                             <em class="pull-right">{{notebook['create_date']}}</em>
                             <span>
                                 <a href="/notebook/delete/" class="delete pull-right">删除</a>
