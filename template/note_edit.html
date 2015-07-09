@@ -214,10 +214,21 @@
     $(function(){
         $(".label").hide();
 
+        // update note mode
+        // 判断是否是修改笔记
+        $("#title").val({{ note['title'] }});
+        $(".wysiwyg-editor").html({{ note['content'] }});
+        // update note mode END!
+
         $("#noteform").submit(function(){
             var title = $.trim($("#title").val());
             var content = $.trim($(".wysiwyg-editor").html());
             var notebookid = $(".notebook").attr("data-notebookid");
+
+            // 如果是修改笔记
+            var noteid = {{ note['noteid'] }};
+            // END
+
             if(title === ''){
                 $(this).find(".label").show();
                 setTimeout('$("#noteform").find(".label").hide()', 3000);
@@ -226,9 +237,12 @@
 
             $.ajax({
                 url: "/note/create/{{ notebook_name }}",
+                // 修改笔记
+                // url : "/note/update/{{ notebook_name }}",
                 type: "POST",
                 dataType : "json",
                 data: {
+                    //"noteid" : noteid,
                     "title" : title,
                     "content" : content,
                     "notebookid" : notebookid
@@ -263,7 +277,8 @@
             $("#noteform").submit();
         })
 
-        $("#cancel").click(function(){
+        $("#cancel").click(function(e){
+            e.preventDefault();
             window.location = '/notebook/{{ username }}';
         })
     })

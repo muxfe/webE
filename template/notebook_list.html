@@ -260,7 +260,9 @@
                 $(this).find("a.delete, a.edit").hide();
             })
 
-            $("a.delete","div.notebook-item").click(function(){
+            $("a.delete","div.notebook-item").click(function(e){
+                e.preventDefault();
+
                 if(confirm("是否真的删除？")){
                     //console.log($(this).attr("href"))
                     window.location = $(this).attr('href');
