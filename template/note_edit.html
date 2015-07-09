@@ -225,7 +225,7 @@
             }
 
             $.ajax({
-                url: "/note/create/{{ username }}",
+                url: "/note/create/{{ notebook_name }}",
                 type: "POST",
                 dataType : "json",
                 data: {
@@ -244,7 +244,7 @@
                     $('#success > .alert-success')
                         .append('</div>');
 
-                    setTimeout('window.location = "/notebook/{{ username }}"', 1000);
+                    setTimeout('window.location = "/notebook/{{ notebook_name }}"', 1000);
                 },
                 error: function() {
                     // Fail message

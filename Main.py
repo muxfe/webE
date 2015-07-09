@@ -24,13 +24,6 @@ class BaseHandler(tornado.web.RequestHandler):
         self.notebook = self.db.get_collection('notebook')
         self.note = self.db.get_collection('note')
 
-    def set_default_headers(self):
-        self.set_header('Access-Control-Allow-Origin', '*')
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-        self.set_header('Access-Control-Max-Age', 1000)
-        self.set_header('Access-Control-Allow-Headers', '*')
-        self.set_header('Content-type', 'application/json')
-
     def get_current_user(self):
         return self.get_secure_cookie('username')
 
@@ -97,7 +90,6 @@ class RegisterHandler(BaseHandler):
 class ReadNoteBookHandler(BaseHandler):
     @authenticated
     def get(self,notebook_name):
-        print(notebook_name)
         username = self.get_current_user().decode()
         show_note = self.note.find({'username':username,'notebook_name':notebook_name})
         # notebookid = self.notebook.find_one({'username':username})['notebookid']
@@ -118,12 +110,15 @@ class ReadNoteBookHandler(BaseHandler):
 # 查看笔记 /note/noteid
 class ReadNoteHandler(BaseHandler):
     def get(self,noteid):
+        username = self.get_current_user().decode()
+        userid = self.user.find_one({'username':username})['userid']
         note = self.note.find_one_and_delete({'noteid':noteid},{'_id':0})
         note['visit'] += 1
         self.note.insert(note)
         self.render(
             'note.html',
             note = note,
+            userid = userid
         )
 
 #创建笔记 /note/create/notebook_name
@@ -142,12 +137,13 @@ class CreateNoteHandler(BaseHandler):
             notebookid = notebookid,
         )
 
-    def post(self, username):
+    def post(self, notebook_name):
         title = self.get_argument('title')
         content = self.get_argument('content')
         notebookid = self.get_argument('notebookid')
         notebook = self.notebook.find_one({'notebookid':notebookid})
-        notebook_name = notebook.get('notebook_name','Default') if notebook else 'Default'
+        username = self.get_current_user().decode()
+        notebook_name = notebook_name
         count = self.note.count() + 1
         judge = self.note.find_one({'username':username,'note_title':title,'notebook_name':notebook_name})
         if judge == None:
@@ -169,7 +165,7 @@ class CreateNoteHandler(BaseHandler):
 class CreateNoteBookHandler(BaseHandler):
     @authenticated
     def get(self, userid):
-        notebooks= self.notebook.find({'userid':userid})
+        notebooks = self.notebook.find({'userid':userid})
         username = self.user.find_one({'userid':userid})['username']
         self.render(
             'notebook_list.html',

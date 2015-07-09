@@ -191,6 +191,7 @@
                 },
                 success: function(){
                     alert("创建成功！");
+                    setTimeout('window.location = "/notebook_list/{{ userid }}"', 1000);
                 },
                 error: function(){
                     alert("创建失败！");
