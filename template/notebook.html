@@ -99,11 +99,11 @@
                 <div class="noteitem">
                     <div class="row">
                         <span><a href="/note/{{noteitem['noteid']}}">{{ noteitem['note_title'] }}</a></span>
-                        <span class="pull-right">{{ noteitem['username'] }}</span>
+                        <!--<span class="pull-right">{{ noteitem['username'] }}</span>-->
                     </div>
                     <div class="row">
-                        <a href="/note/delete/" class="delete">删除</a>
-                        <a href="/note/update/" class="edit">编辑</a>
+                        <a href="/note/delete/{{noteitem['noteid']}}" class="delete">删除</a>
+                        <a href="/note/update/{{noteitem['noteid']}}" class="edit">编辑</a>
                         <span class="pull-right">浏览次数：{{ noteitem['visit'] }}</span>
                         <em class="pull-right">{{ noteitem['create_date'] }}</em>
                     </div>
@@ -155,7 +155,8 @@
                 $(this).find("a.delete, a.edit").hide();
             })
 
-            $("a.delete","div.noteitem").click(function(){
+            $("a.delete","div.noteitem").click(function(e){
+                e.preventDefault();
                 if(confirm("是否真的删除？")){
                     //console.log($(this).attr("href"))
                     window.location = $(this).attr('href');

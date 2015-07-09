@@ -102,8 +102,8 @@
                             <span><a href="/notebook/{{ notebook['notebook_name'] }}">{{ notebook['notebook_name'] }}</a></span>
                             <em class="pull-right">{{notebook['create_date']}}</em>
                             <span>
-                                <a href="/notebook/delete/" class="delete pull-right">删除</a>
-                                <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                                <a href="/notebook/delete/{{ notebook['notebook_name'] }}" class="delete pull-right">删除</a>
+                                <a href="/notebook/update/{{ notebook['notebook_name'] }}" class="edit pull-right">编辑</a>
                             </span>
                         </div>
                     </div>
@@ -222,7 +222,8 @@
                 $(this).find("a.delete, a.edit").hide();
             })
 
-            $("a.delete","div.notebook-item").click(function(){
+            $("a.delete","div.notebook-item").click(function(e){
+                e.preventDefault();
                 if(confirm("是否真的删除？")){
                     //console.log($(this).attr("href"))
                     window.location = $(this).attr('href');
