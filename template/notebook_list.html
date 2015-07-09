@@ -42,6 +42,12 @@
 
         #notebook-des {margin: 30px 0;}
         #btn-create-notebook {margin-right: 20px;}
+
+        .notebook-list .notebook-item span:last-child a {margin-right: 10px;font-size: 15px;}
+        .notebook-list .notebook-item span:last-child a.delete {color:#FF3030 !important; display:none;}
+        .notebook-list .notebook-item span:last-child a.delete:hover {color:#CD2626 !important;text-decoration: none !important;}
+        .notebook-list .notebook-item span:last-child a.edit {color:#1E90FF !important; display:none;}
+        .notebook-list .notebook-item span:last-child a.edit:hover {color:#104E8B !important;text-decoration: none !important;}           
     </style>
 
 </head>
@@ -89,16 +95,69 @@
         <span class="notebook"><em>{{ username }}的笔记本</em></span>
         <a class="btn pull-right" href="#create-notebook" data-toggle="modal">+添加笔记本</a>
         <div class="notebook-list">
+<<<<<<< HEAD
             {% if notebooks %}
                 {% for notebook in notebooks %}
                     <div class="notebook-item">
                         <div class="row">
-                            <span><a href="/notebook/{{notebook['notebook_name']}}">{{notebook['notebook_name']}}</a></span>
+                            <span><a href="/notebook_list/{{ userid }}">{{ note['username'] }}</a></span>
                             <em class="pull-right">{{notebook['create_date']}}</em>
                         </div>
                     </div>
                 {% end %}
             {% end %}
+=======
+            <div class="notebook-item">
+                <div class="row">
+                    <span><a href="">Notebook</a></span>
+                    <em class="pull-right">2015-07-06</em>
+                    <span>
+                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
+                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                    </span>
+                </div>
+            </div>
+            <div class="notebook-item">
+                <div class="row">
+                    <span><a href="">Notebook</a></span>
+                    <em class="pull-right">2015-07-06</em>
+                    <span>
+                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
+                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                    </span>
+                </div>
+            </div>
+            <div class="notebook-item">
+                <div class="row">
+                    <span><a href="">Notebook</a></span>
+                    <em class="pull-right">2015-07-06</em>
+                    <span>
+                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
+                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                    </span>
+                </div>
+            </div>
+            <div class="notebook-item">
+                <div class="row">
+                    <span><a href="">Notebook</a></span>
+                    <em class="pull-right">2015-07-06</em>
+                    <span>
+                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
+                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                    </span>
+                </div>
+            </div>
+            <div class="notebook-item">
+                <div class="row">
+                    <span><a href="">Notebook</a></span>
+                    <em class="pull-right">2015-07-06</em>
+                    <span>
+                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
+                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                    </span>
+                </div>
+            </div>
+>>>>>>> master
         </div>
     </section>
 
@@ -172,10 +231,12 @@
     <script src="{{ static_url('js/freelancer.js')}}"></script>
 
     <script type="text/javascript">
-        $("#notebook-form").submit(function(){
-            var name = $("#notebook-name").val();
-            var des = $("#notebook-des").val();
+        $(function(){
+            $("#notebook-form").submit(function(){
+                var name = $("#notebook-name").val();
+                var des = $("#notebook-des").val();
 
+<<<<<<< HEAD
             if(name === ''){
                 alert("笔记本名称不能为空！");
                 return false;
@@ -195,14 +256,51 @@
                 },
                 error: function(){
                     alert("创建失败！");
+=======
+                if(name === ''){
+                    alert("笔记本名称不能为空！");
+                    return false;
+>>>>>>> master
                 }
+
+                $.ajax({
+                    url: "/notebook/create",
+                    dataType: "json",
+                    data: {
+                        "notebook_name" : name,
+                        "notebook_description" : des
+                    },
+                    success: function(data){
+                        alert("创建成功！");
+                        setTimeout('window.location = "/notebook_list/{{ userid }}"', 1000);
+                    },
+                    error: function(){
+                        alert("创建失败！");
+                    }
+                })
+
+                return false;
             })
 
-            return false;
-        })
+            $("#btn-create-notebook").click(function(){
+                $("#notebook-form").submit();
+            })
 
-        $("#btn-create-notebook").click(function(){
-            $("#notebook-form").submit();
+            $("div.notebook-item", "div.notebook-list").hover(function(){
+                $(this).find("a.delete, a.edit").show();
+            }, function(){
+                $(this).find("a.delete, a.edit").hide();
+            })
+
+            $("a.delete","div.notebook-item").click(function(){
+                if(confirm("是否真的删除？")){
+                    //console.log($(this).attr("href"))
+                    window.location = $(this).attr('href');
+                }else{
+                    //console.log("取消删除");
+                    return false;
+                }
+            })            
         })
     </script>
 </body>
