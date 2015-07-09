@@ -95,69 +95,20 @@
         <span class="notebook"><em>{{ username }}的笔记本</em></span>
         <a class="btn pull-right" href="#create-notebook" data-toggle="modal">+添加笔记本</a>
         <div class="notebook-list">
-<<<<<<< HEAD
             {% if notebooks %}
                 {% for notebook in notebooks %}
                     <div class="notebook-item">
                         <div class="row">
                             <span><a href="/notebook_list/{{ userid }}">{{ note['username'] }}</a></span>
                             <em class="pull-right">{{notebook['create_date']}}</em>
+                            <span>
+                                <a href="/notebook/delete/" class="delete pull-right">删除</a>
+                                <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                            </span>
                         </div>
                     </div>
                 {% end %}
             {% end %}
-=======
-            <div class="notebook-item">
-                <div class="row">
-                    <span><a href="">Notebook</a></span>
-                    <em class="pull-right">2015-07-06</em>
-                    <span>
-                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
-                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
-                    </span>
-                </div>
-            </div>
-            <div class="notebook-item">
-                <div class="row">
-                    <span><a href="">Notebook</a></span>
-                    <em class="pull-right">2015-07-06</em>
-                    <span>
-                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
-                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
-                    </span>
-                </div>
-            </div>
-            <div class="notebook-item">
-                <div class="row">
-                    <span><a href="">Notebook</a></span>
-                    <em class="pull-right">2015-07-06</em>
-                    <span>
-                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
-                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
-                    </span>
-                </div>
-            </div>
-            <div class="notebook-item">
-                <div class="row">
-                    <span><a href="">Notebook</a></span>
-                    <em class="pull-right">2015-07-06</em>
-                    <span>
-                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
-                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
-                    </span>
-                </div>
-            </div>
-            <div class="notebook-item">
-                <div class="row">
-                    <span><a href="">Notebook</a></span>
-                    <em class="pull-right">2015-07-06</em>
-                    <span>
-                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
-                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
-                    </span>
-                </div>
-            </div>
->>>>>>> master
         </div>
     </section>
 
@@ -236,41 +187,20 @@
                 var name = $("#notebook-name").val();
                 var des = $("#notebook-des").val();
 
-<<<<<<< HEAD
-            if(name === ''){
-                alert("笔记本名称不能为空！");
-                return false;
-            }
-
-            $.ajax({
-                url: "/notebook/create/{{username}}",
-                type : 'POST',
-                dataType: "json",
-                data: {
-                    "notebook_name" : name,
-                    "notebook_description" : des
-                },
-                success: function(){
-                    alert("创建成功！");
-                    setTimeout('window.location = "/notebook_list/{{ userid }}"', 1000);
-                },
-                error: function(){
-                    alert("创建失败！");
-=======
                 if(name === ''){
                     alert("笔记本名称不能为空！");
                     return false;
->>>>>>> master
                 }
 
                 $.ajax({
-                    url: "/notebook/create",
+                    url: "/notebook/create/{{username}}",
+                    type : 'POST',
                     dataType: "json",
                     data: {
                         "notebook_name" : name,
                         "notebook_description" : des
                     },
-                    success: function(data){
+                    success: function(){
                         alert("创建成功！");
                         setTimeout('window.location = "/notebook_list/{{ userid }}"', 1000);
                     },
