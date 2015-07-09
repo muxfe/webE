@@ -64,7 +64,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Messnote</a>
+                <a class="navbar-brand" href="/">Messnote</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -74,13 +74,13 @@
                         <a href="#page-top"></a>
                     </li>
                     <li class="page-scroll">
-                        <a href="index.html?#portfolio">热门</a>
+                        <a href="/?#portfolio">热门</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="index.html?#about">关于</a>
+                        <a href="/?#about">关于</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="index.html?#contact">联系我们</a>
+                        <a href="/?#contact">联系我们</a>
                     </li>
                 </ul>
             </div>
@@ -91,9 +91,22 @@
 
     
     <section>
-        <span class="notebook"><em>x-web的笔记本</em> - nodejs</span>
-        <a class="btn pull-right" href="/note_edit.html">+创建笔记</a>
+        <span class="notebook"><em>{{ username }}</em>  ----  {{ notebook_name }}</span>
+        <a class="btn pull-right" href="/note/create/{{ notebook_name }}">+创建笔记</a>
         <div class="notelist">
+<<<<<<< HEAD
+            {% if show_note %}
+                {% for noteitem in show_note %}
+                <div class="noteitem">
+                    <div class="row">
+                        <span><a href="/note/{{noteitem['noteid']}}">{{ noteitem['note_title'] }}</a></span>
+                        <span class="pull-right">{{ noteitem['username'] }}</span>
+                    </div>
+                    <div class="row">
+                        <span class="pull-right">浏览次数：{{ noteitem['visit'] }}</span>
+                        <em class="pull-right">{{ noteitem['create_date'] }}</em>
+                    </div>
+=======
             <div class="noteitem">
                 <div class="row">
                     <span><a href="">Title</a></span>
@@ -152,8 +165,10 @@
                     <a href="/note/update/" class="edit">编辑</a>
                     <span class="pull-right">浏览次数：13</span>
                     <em class="pull-right">2015-07-06</em>
+>>>>>>> master
                 </div>
-            </div>
+                {% end %}
+            {% end %}
         </div>
     </section>
 

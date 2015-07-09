@@ -65,7 +65,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Messnote</a>
+                <a class="navbar-brand" href="/">Messnote</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -75,13 +75,13 @@
                         <a href="#page-top"></a>
                     </li>
                     <li class="page-scroll">
-                        <a href="index.html?#portfolio">热门</a>
+                        <a href="/?#portfolio">热门</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="index.html?#about">关于</a>
+                        <a href="/?#about">关于</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="index.html?#contact">联系我们</a>
+                        <a href="/?#contact">联系我们</a>
                     </li>
                 </ul>
             </div>
@@ -92,9 +92,21 @@
 
     
     <section>
-        <span class="notebook"><em>x-web的笔记本</em></span>
+        <span class="notebook"><em>{{ username }}的笔记本</em></span>
         <a class="btn pull-right" href="#create-notebook" data-toggle="modal">+添加笔记本</a>
         <div class="notebook-list">
+<<<<<<< HEAD
+            {% if notebooks %}
+                {% for notebook in notebooks %}
+                    <div class="notebook-item">
+                        <div class="row">
+                            <span><a href="/notebook_list/{{ userid }}">{{ note['username'] }}</a></span>
+                            <em class="pull-right">{{notebook['create_date']}}</em>
+                        </div>
+                    </div>
+                {% end %}
+            {% end %}
+=======
             <div class="notebook-item">
                 <div class="row">
                     <span><a href="">Notebook</a></span>
@@ -145,6 +157,7 @@
                     </span>
                 </div>
             </div>
+>>>>>>> master
         </div>
     </section>
 
@@ -223,9 +236,31 @@
                 var name = $("#notebook-name").val();
                 var des = $("#notebook-des").val();
 
+<<<<<<< HEAD
+            if(name === ''){
+                alert("笔记本名称不能为空！");
+                return false;
+            }
+
+            $.ajax({
+                url: "/notebook/create/{{username}}",
+                type : 'POST',
+                dataType: "json",
+                data: {
+                    "notebook_name" : name,
+                    "notebook_description" : des
+                },
+                success: function(){
+                    alert("创建成功！");
+                    setTimeout('window.location = "/notebook_list/{{ userid }}"', 1000);
+                },
+                error: function(){
+                    alert("创建失败！");
+=======
                 if(name === ''){
                     alert("笔记本名称不能为空！");
                     return false;
+>>>>>>> master
                 }
 
                 $.ajax({
@@ -237,6 +272,7 @@
                     },
                     success: function(data){
                         alert("创建成功！");
+                        setTimeout('window.location = "/notebook_list/{{ userid }}"', 1000);
                     },
                     error: function(){
                         alert("创建失败！");

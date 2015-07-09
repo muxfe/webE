@@ -1,4 +1,7 @@
 __author__ = 'Benco'
 
-import html.parser
+from html.parser import HTMLParser
+
+class FilterParser(HTMLParser):
+    pass
 

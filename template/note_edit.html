@@ -124,7 +124,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Messnote</a>
+                <a class="navbar-brand" href="/">Messnote</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -134,13 +134,13 @@
                         <a href="#page-top"></a>
                     </li>
                     <li class="page-scroll">
-                        <a href="index.html?#portfolio">热门</a>
+                        <a href="/?#portfolio">热门</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="index.html?#about">关于</a>
+                        <a href="/?#about">关于</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="index.html?#contact">联系我们</a>
+                        <a href="/?#contact">联系我们</a>
                     </li>
                 </ul>
             </div>
@@ -150,11 +150,11 @@
     </nav>
 
     <section>
-        <span><em><a href="" data-notebookid="1" class="notebook">x-web的笔记本 - nodejs</a></em></span>
+        <span><em><a href="" data-notebookid="{{ notebookid }}" class="notebook">{{ username }}的笔记本 - {{ notebook_name }}</a></em></span>
 
         <form id="noteform">  
 
-            <input type="text" class="input-xlarge" id="title" placeholder="笔记标题" />
+            <input type="text" class="input-xlarge" name="title" id="title" placeholder="笔记标题" />
             <span class="label label-important">标题不能为空!</span>
 
             <div>
@@ -201,10 +201,6 @@
     <script src="{{ static_url('js/classie.js')}}"></script>
     <script src="{{ static_url('js/cbpAnimatedHeader.js') }}"></script>
 
-    <!-- Contact Form JavaScript -->
-    <script src="{{ static_url('js/jqBootstrapValidation.js')}}"></script>
-    <script src="{{ static_url('js/contact_me.js')}}"></script>
-
     <!-- Custom Theme JavaScript -->
     <script src="{{ static_url('js/freelancer.js')}}"></script>
 
@@ -222,7 +218,6 @@
             var title = $.trim($("#title").val());
             var content = $.trim($(".wysiwyg-editor").html());
             var notebookid = $(".notebook").attr("data-notebookid");
-
             if(title === ''){
                 $(this).find(".label").show();
                 setTimeout('$("#noteform").find(".label").hide()', 3000);
@@ -230,7 +225,7 @@
             }
 
             $.ajax({
-                url: "/note/create",
+                url: "/note/create/{{ notebook_name }}",
                 type: "POST",
                 dataType : "json",
                 data: {
@@ -249,7 +244,7 @@
                     $('#success > .alert-success')
                         .append('</div>');
 
-                    setTimeout('window.location = "notebook.html"', 1000);
+                    setTimeout('window.location = "/notebook/{{ notebook_name }}"', 1000);
                 },
                 error: function() {
                     // Fail message
@@ -269,7 +264,7 @@
         })
 
         $("#cancel").click(function(){
-            window.location = 'notebook.html';
+            window.location = '/notebook/{{ username }}';
         })
     })
     </script>
