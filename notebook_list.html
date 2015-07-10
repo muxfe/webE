@@ -69,7 +69,7 @@
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <div class="collapse navbar-collapse" id="navbar">
                 <ul class="nav navbar-nav navbar-right">
                     <li class="hidden">
                         <a href="#page-top"></a>
@@ -111,48 +111,58 @@
                     <span><a href="notebook.html" data-notebookid="1">Notebook</a></span>
                     <em class="pull-right">2015-07-06</em>
                     <span>
-                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
-                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                        <a href="" class="delete pull-right">删除</a>
+                        <a href="" class="edit pull-right">编辑</a>
                     </span>
                 </div>
             </div>
             <div class="notebook-item">
                 <div class="row">
-                    <span><a href="">Notebook</a></span>
+                    <span><a href="notebook.html" data-notebookid="1">Notebook</a></span>
                     <em class="pull-right">2015-07-06</em>
                     <span>
-                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
-                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                        <a href="" class="delete pull-right">删除</a>
+                        <a href="" class="edit pull-right">编辑</a>
                     </span>
                 </div>
             </div>
             <div class="notebook-item">
                 <div class="row">
-                    <span><a href="">Notebook</a></span>
+                    <span><a href="notebook.html" data-notebookid="1">Notebook</a></span>
                     <em class="pull-right">2015-07-06</em>
                     <span>
-                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
-                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                        <a href="" class="delete pull-right">删除</a>
+                        <a href="" class="edit pull-right">编辑</a>
                     </span>
                 </div>
             </div>
             <div class="notebook-item">
                 <div class="row">
-                    <span><a href="">Notebook</a></span>
+                    <span><a href="notebook.html" data-notebookid="1">Notebook</a></span>
                     <em class="pull-right">2015-07-06</em>
                     <span>
-                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
-                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                        <a href="" class="delete pull-right">删除</a>
+                        <a href="" class="edit pull-right">编辑</a>
                     </span>
                 </div>
             </div>
             <div class="notebook-item">
                 <div class="row">
-                    <span><a href="">Notebook</a></span>
+                    <span><a href="notebook.html" data-notebookid="1">Notebook</a></span>
                     <em class="pull-right">2015-07-06</em>
                     <span>
-                        <a href="/notebook/delete/" class="delete pull-right">删除</a>
-                        <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                        <a href="" class="delete pull-right">删除</a>
+                        <a href="" class="edit pull-right">编辑</a>
+                    </span>
+                </div>
+            </div>
+            <div class="notebook-item">
+                <div class="row">
+                    <span><a href="notebook.html" data-notebookid="1">Notebook</a></span>
+                    <em class="pull-right">2015-07-06</em>
+                    <span>
+                        <a href="" class="delete pull-right">删除</a>
+                        <a href="" class="edit pull-right">编辑</a>
                     </span>
                 </div>
             </div>
@@ -256,7 +266,6 @@
     <script src="js/bootstrap.min.js"></script>
 
     <!-- Plugin JavaScript -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
     <script src="js/classie.js"></script>
     <script src="js/cbpAnimatedHeader.js"></script>
 
@@ -332,7 +341,7 @@
                     }
 
                     $.ajax({
-                        url: "/notebook/update",
+                        url: "#",
                         dataType: "json",
                         data: {
                             "notebookid" : notebookid,
