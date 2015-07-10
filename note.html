@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Messnote - Note</title>
+
+    <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/freelancer.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        section {width:50%; margin: 50px auto;}
+        section .title {text-align: center;margin-top: 20px;}
+        section .content {font-size: 18px;line-height: 30px;margin: 20px 0;}
+        section .notebook {color: #333;font-size: 20px;}
+        section .notebook:hover {text-decoration: none; color: #777;}
+    </style>
+
+</head>
+
+<body id="page-top" class="index">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Messnote</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="index.html?#portfolio">热门</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="index.html?#about">关于</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="index.html?#contact">联系我们</a>
+                    </li>
+                    <li>
+                        <div class="btn-group">  
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">x-web<span class="caret"></span></a>  
+                            <ul class="dropdown-menu">    
+                            <!-- dropdown menu links -->  
+                                <li><a href="#">个人信息</a></li>
+                                <li><a href="notebook_list.html">我的笔记本</a></li>
+                                <li><a href="#">注销</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <section>
+        <article>
+            <span><em><a href="" class="notebook">x-web的笔记本 - nodejs</a></em></span>
+            <div class="title">
+                <h2>Title</h2>
+                <p>author</p><span>2015-07-06</span>
+            </div>
+            <div class="content">
+                “Node.js 是谷歌 V8 引擎、libuv平台抽象层 以及主体使用 Javscript 编写的核心库三者集合的一个包装外壳。”--wiki
+                Node.js 的作者瑞恩·达尔 (Ryan Dahl) 的目标是创建具有实时推送能力的网站。
+                Node.js 在实时的 Web应用上采用了基于 WebSocket 的推送技术。
+                Node.js 的主要思路是：使用非阻塞的，事件驱动的 I/O 操作来保持在处理跨平台 (across distributed devices) 数据密集型实时应用时的轻巧高效。
+
+
+                第一步 预约时间
+                1.请求 本学期起止时间 + 节假日时间 + 已被选择情况（已选满、未选满、未选）
+                2.生成时间表格并绑定单击事件
+                3.点击下一步
+                4.提交已选时间信息，切换下一步界面
+
+                第二步 选择课程和班级
+                1.通过登录教师信息请求 可选课程 + 上此课程的班级
+                2.通过选择信息请求 需完成课时 + 该班级人数 并显示给用户
+                3.点击下一步
+                #4.提交课程 + 班级信息，进入下一步
+
+                第三步 选择教室
+                1.请求 空闲机房信息 （编号 - 描述 - 机位数）
+                2.处理接收到的机房信息 -- 分页 （5 10 15 20） 
+                3.根据用户选择机房信息，显示未分配人数
+                4.点击下一步
+                #5.提交选择机房信息
+                搜索功能
+                6.从接受到的信息中搜索，前端处理
+
+                第四步 选择模版
+                1.请求模版
+                2.点击下一步
+
+                第五步 确认信息
+                1.列出所有信息
+
+            </div>
+        </article>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright &copy; 2015 <a href="https://x-web.github.io">X-web</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-top page-scroll">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="js/classie.js"></script>
+    <script src="js/cbpAnimatedHeader.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/userform.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="js/freelancer.js"></script>
+
+</body>
+
+</html>

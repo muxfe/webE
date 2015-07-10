@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Messnote - Notebook</title>
+
+    <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/freelancer.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        section {width:50%; margin: 0 auto;padding-top: 200px;}
+        section .notebook {color: #333;font-size: 20px;}
+        
+        section .notelist .noteitem  {list-style: none;margin-top: 50px;border-bottom: 2px dashed #eee;padding: 5px 5px;}
+        section .notelist .noteitem div {margin: 0 0;}
+        section .notelist .noteitem > div + div > span {margin-left: 20px;}
+        section .notelist .noteitem > div > span + span {font-size:20px;}
+        section .notelist .noteitem > div + div {margin-top: 10px;}
+        section .notelist .noteitem > div span a {color:#333;font-size:22px;}
+        section .notelist .noteitem span a:hover {color:#777;text-decoration: none;}
+
+        section > a {color:#333 !important;border: 1px solid #aaa !important;}
+        section > a:hover {color:#333 !important;text-decoration: none;cursor: pointer;background-color: #ffe;font-weight: bold;}
+
+        section .notelist .noteitem a.delete {color:#FF3030 !important; display:none;}
+        section .notelist .noteitem a.delete:hover {color:#CD2626 !important;text-decoration: none !important;}
+
+        section .notelist .noteitem a.edit {color:#1E90FF !important;display:none;}
+        section .notelist .noteitem a.edit:hover {color:#104E8B !important;text-decoration: none !important;}
+    </style>
+
+</head>
+
+<body id="page-top" class="index">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Messnote</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="index.html?#portfolio">热门</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="index.html?#about">关于</a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="index.html?#contact">联系我们</a>
+                    </li>
+                    <li>
+                        <div class="btn-group">  
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">x-web<span class="caret"></span></a>  
+                            <ul class="dropdown-menu">    
+                            <!-- dropdown menu links -->  
+                                <li><a href="#">个人信息</a></li>
+                                <li><a href="notebook_list.html">我的笔记本</a></li>
+                                <li><a href="#">注销</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    
+    <section>
+        <span class="notebook"><em>x-web的笔记本</em> - nodejs</span>
+        <a class="btn pull-right" href="/note_edit.html">+创建笔记</a>
+        <div class="notelist">
+            <div class="noteitem">
+                <div class="row">
+                    <span><a href="note.html">Title</a></span>
+                    <span class="pull-right">author</span>
+                </div>
+                <div class="row">
+                    <a href="/note/delete/" class="delete">删除</a>
+                    <a href="/note/update/" class="edit">编辑</a>
+                    <span class="pull-right">浏览次数：13</span>
+                    <em class="pull-right">2015-07-06</em>
+                </div>
+            </div>
+            <div class="noteitem">
+                <div class="row">
+                    <span><a href="">Title</a></span>
+                    <span class="pull-right">author</span>
+                </div>
+                <div class="row">
+                    <a href="/note/delete/" class="delete">删除</a>
+                    <a href="/note/update/" class="edit">编辑</a>
+                    <span class="pull-right">浏览次数：13</span>
+                    <em class="pull-right">2015-07-06</em>
+                </div>
+            </div>
+            <div class="noteitem">
+                <div class="row">
+                    <span><a href="">Title</a></span>
+                    <span class="pull-right">author</span>
+                </div>
+                <div class="row">
+                    <a href="/note/delete/" class="delete">删除</a>
+                    <a href="/note/update/" class="edit">编辑</a>
+                    <span class="pull-right">浏览次数：13</span>
+                    <em class="pull-right">2015-07-06</em>
+                </div>
+            </div>
+            <div class="noteitem">
+                <div class="row">
+                    <span><a href="">Title</a></span>
+                    <span class="pull-right">author</span>
+                </div>
+                <div class="row">
+                    <a href="/note/delete/" class="delete">删除</a>
+                    <a href="/note/update/" class="edit">编辑</a>
+                    <span class="pull-right">浏览次数：13</span>
+                    <em class="pull-right">2015-07-06</em>
+                </div>
+            </div>
+            <div class="noteitem">
+                <div class="row">
+                    <span><a href="">Title</a></span>
+                    <span class="pull-right">author</span>
+                </div>
+                <div class="row">
+                    <a href="/note/delete/" class="delete">删除</a>
+                    <a href="/note/update/" class="edit">编辑</a>
+                    <span class="pull-right">浏览次数：13</span>
+                    <em class="pull-right">2015-07-06</em>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center">
+        <div class="footer-below">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        Copyright &copy; 2015 <a href="https://x-web.github.io">X-web</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-top page-scroll">
+        <a class="btn btn-primary" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
+    </div>
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="js/classie.js"></script>
+    <script src="js/cbpAnimatedHeader.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/userform.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="js/freelancer.js"></script>
+
+    <script>
+        $(function(){
+            $("div.noteitem", "div.notelist").hover(function(){
+                $(this).find("a.delete, a.edit").show();
+            }, function(){
+                $(this).find("a.delete, a.edit").hide();
+            })
+
+            $("a.delete","div.noteitem").click(function(){
+                if(confirm("是否真的删除？")){
+                    //console.log($(this).attr("href"))
+                    window.location = $(this).attr('href');
+                }else{
+                    //console.log("取消删除");
+                    return false;
+                }
+            })
+        })
+    </script>
+
+</body>
+
+</html>
