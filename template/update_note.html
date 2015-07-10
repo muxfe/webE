@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+{% autoescape None %}
 <head>
 
     <meta charset="utf-8">
@@ -216,8 +216,8 @@
 
         // update note mode
         // 判断是否是修改笔记
-        $("#title").val({{ note['note_title'] }});
-        $(".wysiwyg-editor").html({{ note['note_content'] }});
+        $("#title").val("{{ note['note_title'] }}");
+        $(".wysiwyg-editor").html("{{ note['note_content'] }}");
         // update note mode END!
 
         $("#noteform").submit(function(){

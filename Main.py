@@ -30,6 +30,7 @@ class BaseHandler(tornado.web.RequestHandler):
 # 主页
 class IndexHandler(BaseHandler):
     def get(self):
+        # print(help(self.request))
         boolean = True
         username = None
         date = None
@@ -107,6 +108,13 @@ class ReadNoteHandler(BaseHandler):
         userid = self.user.find_one({'username':username})['userid']
         note = self.note.find_one_and_delete({'noteid':noteid},{'_id':0})
         note['visit'] += 1
+        note['change_date'] = datetime.now().strftime('%Y-%m-%d %I:%M:%S %p')
+        # note['note_content'] = note['note_content'].replace('&lt;','<')
+        # note['note_content'] = note['note_content'].replace('&gt;','>')
+        # note['note_content'] = note['note_content'].replace('&lt;','<')
+        # note['note_content'] = note['note_content'].replace('&amp;',' ')
+        # note['note_content'] = note['note_content'].replace('nbsp;','&nbsp;')
+        print(note)
         self.note.insert(note)
         self.render(
             'note.html',
@@ -133,6 +141,10 @@ class CreateNoteHandler(BaseHandler):
         )
 
     def post(self, notebook_name):
+        # arguments = self.request.arguments
+        # title = arguments['title'][0].decode()
+        # content = arguments['content'][0].decode()
+        # notebookid = arguments['notebookid'][0].decode()
         title = self.get_argument('title')
         content = self.get_argument('content')
         notebookid = self.get_argument('notebookid')
@@ -252,10 +264,9 @@ class UpdateNoteHandler(BaseHandler):
     def get(self, noteid):
         username = self.get_current_user().decode()
         print(username,noteid)
-        notebook = self.notebook.find_one({'username':username})
-        notebookid = notebook['notebookid']
-        notebook_name = notebook['notebook_name']
-        note = self.note.find_one({'username':username,'notebookid':notebookid})
+        notebookid = self.note.find_one({'noteid':noteid})['notebookid']
+        notebook_name = self.notebook.find_one({'username':username,'notebookid':notebookid})['notebook_name']
+        note = self.note.find_one({'username':username,'noteid':noteid})
         self.render(
             'update_note.html',
             username = username,
@@ -320,14 +331,14 @@ class Application(tornado.web.Application):
             (r'/login', LoginHandler),
             (r'/register', RegisterHandler),
             (r'/note/([0-9]+)', ReadNoteHandler),
-            (r'/note/create/([0-9a-zA-Z]+)', CreateNoteHandler),
-            (r'/note/update/([0-9a-zA-Z]+)',UpdateNoteHandler),
-            (r'/notebook/update/([0-9a-zA-Z]+)',UpdateNoteBookHandler),
-            (r'/notebook_list/([0-9a-zA-Z]+)', CreateNoteBookHandler),
-            (r'/notebook/create/([0-9a-zA-Z]+)', FuckNoteBookHandler),
-            (r'/notebook/([0-9a-zA-Z]+)', ReadNoteBookHandler),
-            (r'/notebook/delete/([0-9a-zA-Z]+)', DelNoteBookHandler),
-            (r'/note/delete/([0-9a-zA-Z]+)',DelNoteHandler),
+            (r'/note/create/([0-9a-zA-Z%]+)', CreateNoteHandler),
+            (r'/note/update/([0-9a-zA-Z%]+)',UpdateNoteHandler),
+            (r'/notebook/update/([0-9a-zA-Z%]+)',UpdateNoteBookHandler),
+            (r'/notebook_list/([0-9a-zA-Z%]+)', CreateNoteBookHandler),
+            (r'/notebook/create/([0-9a-zA-Z%]+)', FuckNoteBookHandler),
+            (r'/notebook/([0-9a-zA-Z%]+)', ReadNoteBookHandler),
+            (r'/notebook/delete/([0-9a-zA-Z%]+)', DelNoteBookHandler),
+            (r'/note/delete/([0-9a-zA-Z%]+)',DelNoteHandler),
             (r'/logout', LogoutHandler),
             (r'.*',PageNoteFoundHandler),
         ]
@@ -341,10 +352,13 @@ class Application(tornado.web.Application):
         )
         tornado.web.Application.__init__(self,handlers,**settings)
 
-if __name__ == '__main__':
+def Main():
     tornado.options.parse_command_line()
     application = Application()
     # tornado.web.ErrorHandler = PageNoteFoundHandler
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
+
+if __name__ == '__main__':
+    Main()
