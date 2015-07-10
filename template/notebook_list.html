@@ -102,8 +102,8 @@
                             <span><a href="/notebook/{{ notebook['notebook_name'] }}" data-notebookid="{{ notebook['notebookid'] }}">{{ notebook['notebook_name'] }}</a></span>
                             <em class="pull-right">{{notebook['create_date']}}</em>
                             <span>
-                                <a href="/notebook/delete/" class="delete pull-right">删除</a>
-                                <a href="/notebook/update/" class="edit pull-right">编辑</a>
+                                <a href="/notebook/delete/{{ notebook['notebook_name'] }}" class="delete pull-right">删除</a>
+                                <a href="/notebook/update/{{ notebook['notebook_name'] }}" class="edit pull-right">编辑</a>
                             </span>
                         </div>
                     </div>
@@ -262,7 +262,6 @@
 
             $("a.delete","div.notebook-item").click(function(e){
                 e.preventDefault();
-
                 if(confirm("是否真的删除？")){
                     //console.log($(this).attr("href"))
                     window.location = $(this).attr('href');
@@ -270,8 +269,12 @@
                     //console.log("取消删除");
                     return false;
                 }
-            }) 
+            })
 
+            $("a.edit","div.notebook-item").click(function(e){
+                e.preventDefault();
+                $("#update-notebook").modal();
+            })
             // edit-mode
             $("#btn-update-notebook").click(function(){
                 var self = this;
@@ -286,19 +289,20 @@
                     }
 
                     $.ajax({
-                        url: "/notebook/update",
+                        url: "/notebook/update/{{ notebook_name }}",
+                        type : 'POST',
                         dataType: "json",
                         data: {
-                            "notebookid" : notebookid,
                             "notebook_name" : name,
                             "notebook_description" : des
                         },
                         success: function(data){
                             alert("创建成功！");
-                            setTimeout('window.location = "/notebook_list/{{ userid }}"', 1000);
+                            setTimeout('window.location = "/notebook_list/{{ userid }}"', 1);
                         },
                         error: function(){
                             alert("创建失败！");
+                            setTimeout('window.location = "/notebook_list/{{ userid }}"', 1);
                         }
                     })
 
