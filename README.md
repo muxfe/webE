@@ -1,7 +1,7 @@
 # **Messnote**
 Messnote is a project for web pages filtering and editing. And it is a class assignment of the web enginering in xdu.
 ## Project Demo
-[Messnote demo](https://x-web.github.io/webE)
+[Messnote demo](https://muxfe.github.io/webE)
 ## Mentioned Technology
 `Tornado of Python`<br/>
 `Jquery and Bootstrap`<br/>
